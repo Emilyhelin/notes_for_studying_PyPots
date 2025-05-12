@@ -1,5 +1,4 @@
-# notes_for_studying_PyPots
-📘 PyPOTS 学习笔记大纲
+# 📘 PyPOTS 学习笔记大纲
 1. 项目简介
 项目名称：PyPOTS（Partially-Observed Time Series）
 
