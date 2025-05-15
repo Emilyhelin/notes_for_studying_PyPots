@@ -1,5 +1,4 @@
-# Task02
-# 📘 SAITS: Self-Attention-based Imputation for Time Series 阅读笔记
+# Task02 -- 📘 SAITS: Self-Attention-based Imputation for Time Series 阅读笔记
 
 ## 1️⃣ 文章基本框架
 
