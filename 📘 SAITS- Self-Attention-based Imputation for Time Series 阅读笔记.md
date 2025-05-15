@@ -38,14 +38,15 @@
 
 ### 实施
 
-![\<img alt="" data-attachment-key="C8HTQM3C" width="973" height="378" src="attachments/C8HTQM3C.png" ztype="zimage"> | 973](attachments/C8HTQM3C.png)
+![SAIT架构设计](./SAIT.png)
 
+*   提出两种任务联合优化（ORT + MIT），在训练中模拟缺失值以增强泛化
+ 
 输入带有**自然缺失**的数据X，然后经过随机掩码，制造**人工缺失**。之后使用两种掩码，分别对应**两种loss**：观测值的重建损失（loss of ORT）和人工缺失插值损失（loss of MIT），设计这两种loss的目的在于：MIT 被用于迫使模型尽可能准确地预测缺失值，而 ORT 则被利用来确保模型收敛于观察到的数据分布（MIT is utilized to force the model to predict missing values as accurately as possible, and ORT is leveraged to ensure that the model converges to the distribution of observed data.）。
 
 由此可知，val\_X\_ori为原始数据，只带有自然缺失，而val\_X则为随机掩码后的数据，带有自然缺失和人工缺失，目的是计算模型针对人工缺失值给出的预测值与真实值的MAE，从而挑选模型。test\_X\_ori和test\_X的关系也是这样，test\_X\_ori用于计算最后训练得到的模型对于人工缺失值的预测性能。
 
 *   所有模型统一超参数搜索，早停策略一致
-*   提出两种任务联合优化（ORT + MIT），在训练中模拟缺失值以增强泛化
 
 ### 评价方法
 
@@ -93,19 +94,17 @@
 
 *   **对角 Mask：** 有效避免 attention 自己看自己Self-Attention 的关键在于：
 
-    $$
-    A = \text{Softmax} \left( \frac{QK^T}{\sqrt{d_k}} \right)
-    $$
+ $$ A = \text{Softmax} \left( \frac{QK^T}{\sqrt{d_k}} \right) $$
 
-    其中 $A \in \mathbb{R}^{T \times T}$ 是注意力权重矩阵，表示时间步 $t_i$ 对其他 $t_j$ 的“关注度”。> 在原始形式中，这个矩阵对角线（i = j）是允许非零的，意味着 $t_i$ 可以看到自己。**对角 Mask 就是将这些对角线上的值强行屏蔽掉（例如设为 $-\infty$），使得 softmax 后其权重为 0：**
+    其中 $ A \in \mathbb{R}^{T \times T}$ 是注意力权重矩阵，表示时间步 $t_i$ 对其他 $t_j$ 的“关注度”。> 在原始形式中，这个矩阵对角线（i = j）是允许非零的，意味着 $t_i$ 可以看到自己。**对角 Mask 就是将这些对角线上的值强行屏蔽掉（例如设为 $-\infty$），使得 softmax 后其权重为 0：**
 
-    $$
-    [\text{DiagMask}(x)]_{i,j} =
-    \begin{cases}
-    -\infty & \text{if } i = j \\
-    x_{i,j} & \text{otherwise}
-    \end{cases}
-    $$
+DiagMask(x)[i, j] = {
+    -∞     if i == j  (即对角线上的元素)
+    x[i,j] otherwise
+}
+
+DMSA(Q, K, V) = Softmax( DiagMask(QKᵀ / √dₖ) ) ⋅ V
+
 
 
 
@@ -151,4 +150,3 @@
 
 *   SAITS 的架构是否能适配实时流数据填补？
 *   对比 Diffusion 模型（如CSDI）在不规则采样和大缺失率下是否更具优势？
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"></script>
