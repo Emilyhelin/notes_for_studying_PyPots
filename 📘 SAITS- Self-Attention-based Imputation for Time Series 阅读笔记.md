@@ -1,3 +1,4 @@
+# Task02
 # 📘 SAITS: Self-Attention-based Imputation for Time Series 阅读笔记
 
 ## 1️⃣ 文章基本框架
@@ -147,13 +148,8 @@
     | 参数高效 | 融合只用一层线性+Sigmoid 生成权重，计算量很小 |
 
 
-### 工具
-
-*   PyTorch
-*   GitHub: <https://github.com/WenjieDu/SAITS>
-*   四个数据集的标准处理脚本
-
 ### 问题：
 
 *   SAITS 的架构是否能适配实时流数据填补？
 *   对比 Diffusion 模型（如CSDI）在不规则采样和大缺失率下是否更具优势？
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"></script>
